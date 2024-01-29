@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -7,13 +9,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  mount LetterOpenerWeb::Engine, at: "/letter_opener"
-  
+  mount LetterOpenerWeb::Engine, at: '/letter_opener'
+
   namespace :api do
-    resource :registrations do 
+    resource :registrations do
       get :confirm_user
     end
-    resources :users do 
+    resources :users do
       collection do
         post :sign_in
         put :change_password

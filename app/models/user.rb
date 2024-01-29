@@ -14,6 +14,34 @@ class User < ApplicationRecord
 
   before_save :set_qr_secret, if: ->(obj) { obj.qr_secret.blank? }
 
+  def sign_in(sign_in_params=[])
+    if self.authenticate(sign_in_params[:password])
+      status = 200
+      if self.authy_enabled?
+        self.send_token
+        qr_code = self.provisioning_uri(self.name)
+        response = { success: true, id: self.id, name: self.name, message: 'An OTP is send to your registered email.', qr_code: qr_code }
+      else
+        response =  { success: true, id: self.id, name: self.name, token: self.get_access_token}
+      end
+    else
+      response = { success: false, msg: 'Invalid password.' }
+      status = 404
+    end
+    return status, response
+  end
+
+  def password_check(password_params = {})
+    self.attributes = password_params
+    self.valid?
+    if self.authenticate(password_params[:password])
+      errors.add(:password, "New password cannot be the same as the current password.")
+    end
+    unless self.authenticate(password_params[:current_password])
+      errors.add(:password, "Invalid Password.")
+    end
+  end
+
   def send_token
     otp = self.otp_code
     ApplicationMailer.send_otp(self, otp).deliver
@@ -21,6 +49,10 @@ class User < ApplicationRecord
 
   def active?
     confirmed_at.present?
+  end
+
+  def get_access_token
+    JwtAuth.encode({ id: self.id, email: self.email })
   end
 
   private

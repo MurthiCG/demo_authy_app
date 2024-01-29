@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class ApplicationMailer < ActionMailer::Base
   include Rails.application.routes.url_helpers
-  
+
   default from: 'from@example.com'
   layout 'mailer'
 
@@ -8,7 +10,7 @@ class ApplicationMailer < ActionMailer::Base
     @user = user
     mail(
       to: user.email,
-      subject: "Regstration Confirmation"
+      subject: 'Regstration Confirmation'
     )
   end
 
@@ -17,7 +19,7 @@ class ApplicationMailer < ActionMailer::Base
     @otp = otp
     mail(
       to: user.email,
-      subject: "One Time Password to login"
+      subject: 'One Time Password to login'
     )
   end
 end
