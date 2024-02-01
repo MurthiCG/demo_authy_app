@@ -49,12 +49,11 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers', '~> 5.0'
   gem 'letter_opener'
-  gem 'letter_opener_web'  
+  gem 'letter_opener_web' 
+  gem 'byebug' 
 end
 
 group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-  gem 'letter_opener'
-  gem 'letter_opener_web'
 end

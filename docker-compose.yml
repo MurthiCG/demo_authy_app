@@ -1,0 +1,18 @@
+version: '3'
+services:
+  database:
+    image: postgres
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "root"
+      POSTGRES_DB: "demo_authy_app_dev"
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+  web:
+    build: .
+    volumes:
+      - .:/demo_auth_app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
